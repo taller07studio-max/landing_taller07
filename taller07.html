@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taller 07 — Software hecho con criterio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:     #1F4D3A;
+      --dark-green:#17382B;
+      --orange:    #E2872B;
+      --beige:     #E8E1D9;
+      --off-white: #F5F3EF;
+      --black:     #1A1A1A;
+      --rule:      #1F4D3A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--off-white);
+      color: var(--black);
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── PAPER TEXTURE OVERLAY ─────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* ── UTILITY ───────────────────────────────────── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+    .serif     { font-family: 'Playfair Display', Georgia, serif; }
+    .fell      { font-family: 'IM Fell English', Georgia, serif; }
+    .sans      { font-family: 'DM Sans', sans-serif; }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0;
+    }
+    hr.rule-double {
+      border: none;
+      border-top: 3px double var(--rule);
+      margin: 0;
+    }
+    hr.rule-thick {
+      border: none;
+      border-top: 3px solid var(--rule);
+      margin: 0;
+    }
+
+    .ornament {
+      display: block;
+      text-align: center;
+      color: var(--orange);
+      font-size: 1.2rem;
+      letter-spacing: 0.5rem;
+      margin: 0.5rem 0;
+      font-family: 'IM Fell English', serif;
+    }
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--green);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--green);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-logo span {
+      color: var(--orange);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+    .nav-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--green);
+      color: var(--off-white);
+      padding: 0.5rem 1.25rem;
+      text-decoration: none;
+      border: 1px solid var(--green);
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--orange); border-color: var(--orange); }
+
+    /* ── HERO ──────────────────────────────────────── */
+    .hero {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--green);
+    }
+    .hero-dateline {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--green);
+      margin-bottom: 1.5rem;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--orange);
+    }
+    .hero-sub {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      color: var(--black);
+      line-height: 1.75;
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--green);
+      color: var(--off-white);
+      padding: 0.8rem 2rem;
+      text-decoration: none;
+      border: 1px solid var(--green);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--orange); border-color: var(--orange); }
+    .btn-secondary {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-decoration: none;
+      border-bottom: 1px solid var(--green);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--orange); border-color: var(--orange); }
+
+    /* Hero right: editorial plate */
+    .hero-plate {
+      border: 1px solid var(--green);
+      padding: 2.5rem;
+      position: relative;
+    }
+    .hero-plate::before {
+      content: '';
+      position: absolute;
+      top: 6px; right: 6px; bottom: 6px; left: 6px;
+      border: 1px solid var(--green);
+      pointer-events: none;
+      opacity: 0.35;
+    }
+    .plate-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .plate-list {
+      list-style: none;
+    }
+    .plate-list li {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.92rem;
+      color: var(--green);
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(31,77,58,0.2);
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+    .plate-list li:last-child { border-bottom: none; }
+    .plate-list li::before {
+      content: '—';
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+    .plate-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--beige);
+      position: absolute;
+      bottom: 1rem;
+      right: 1.5rem;
+      line-height: 1;
+      z-index: 0;
+    }
+
+    /* ── MANIFIESTO ────────────────────────────────── */
+    .manifesto {
+      background: var(--green);
+      color: var(--off-white);
+      padding: 5rem 0;
+      text-align: center;
+    }
+    .manifesto-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+    }
+    .manifesto-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.6rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.4;
+      max-width: 760px;
+      margin: 0 auto 2rem;
+      color: var(--off-white);
+    }
+    .manifesto-text strong {
+      font-style: normal;
+      font-weight: 700;
+      color: var(--orange);
+    }
+    .manifesto-rule {
+      border: none;
+      border-top: 1px solid rgba(232,225,217,0.25);
+      max-width: 200px;
+      margin: 2rem auto;
+    }
+    .manifesto-caption {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(232,225,217,0.55);
+    }
+
+    /* ── SERVICES ──────────────────────────────────── */
+    .services {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--green);
+    }
+    .section-header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 3.5rem;
+    }
+    .section-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      color: var(--orange);
+      letter-spacing: 0.1em;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--green);
+      border-bottom: 1px solid var(--green);
+      padding-bottom: 0.75rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--green);
+    }
+    .service-card {
+      padding: 2rem 1.75rem;
+      border-right: 1px solid var(--green);
+      border-bottom: 1px solid var(--green);
+      position: relative;
+    }
+    .service-card:nth-child(3n) { border-right: none; }
+    .service-card:nth-last-child(-n+3) { border-bottom: none; }
+    .service-card:nth-last-child(-n+2) { border-bottom: none; }
+    .service-card:last-child { border-bottom: none; border-right: none; }
+    .service-card-index {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--beige);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .service-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+    .service-card-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: #444;
+    }
+
+    /* ── PROCESS ───────────────────────────────────── */
+    .process {
+      padding: 5rem 0;
+      background: var(--beige);
+      border-bottom: 1px solid var(--green);
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 3rem;
+      border-left: 1px solid var(--green);
+    }
+    .process-step {
+      padding: 2rem 1.75rem;
+      border-right: 1px solid var(--green);
+      position: relative;
+    }
+    .step-num {
+      font-family: 'IM Fell English', serif;
+      font-size: 3rem;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    .step-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #4a4a4a;
+    }
+
+    /* ── FOR WHOM ──────────────────────────────────── */
+    .for-whom {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--green);
+    }
+    .for-whom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+    }
+    .for-card-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .for-card-label.yes { color: var(--orange); }
+    .for-card-label.no  { color: #999; }
+    .for-card-list {
+      list-style: none;
+    }
+    .for-card-list li {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.92rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(31,77,58,0.15);
+      display: flex;
+      gap: 0.75rem;
+      color: var(--black);
+    }
+    .for-card-list li:last-child { border-bottom: none; }
+    .for-card-list li .mark-yes { color: var(--orange); }
+    .for-card-list li .mark-no  { color: #ccc; }
+
+    /* ── PHILOSOPHY ────────────────────────────────── */
+    .philosophy {
+      background: var(--green);
+      padding: 5rem 0;
+    }
+    .philosophy-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+    .phil-left-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+    }
+    .phil-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--off-white);
+      line-height: 1.2;
+      margin-bottom: 2rem;
+    }
+    .phil-beliefs {
+      list-style: none;
+    }
+    .phil-beliefs li {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.88rem;
+      color: rgba(245,243,239,0.75);
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(245,243,239,0.12);
+      line-height: 1.6;
+    }
+    .phil-beliefs li:last-child { border-bottom: none; }
+    .phil-beliefs li::before {
+      content: '§ ';
+      color: var(--orange);
+      font-style: normal;
+    }
+    .principles-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+    }
+    .principles-list {
+      list-style: none;
+      counter-reset: principle;
+    }
+    .principles-list li {
+      counter-increment: principle;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 0.75rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(245,243,239,0.12);
+    }
+    .principles-list li:last-child { border-bottom: none; }
+    .principles-list li::before {
+      content: counter(principle, upper-roman);
+      font-family: 'IM Fell English', serif;
+      font-size: 0.85rem;
+      color: var(--orange);
+      padding-top: 2px;
+    }
+    .principles-list li span {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--off-white);
+      line-height: 1.4;
+    }
+
+    /* ── FAQ ───────────────────────────────────────── */
+    .faq {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--green);
+      background: var(--off-white);
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 4rem;
+      margin-top: 3rem;
+    }
+    .faq-item {
+      border-top: 1px solid var(--green);
+      padding: 1.5rem 0;
+    }
+    .faq-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+    .faq-a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.87rem;
+      line-height: 1.7;
+      color: #4a4a4a;
+    }
+
+    /* ── CTA FINAL ─────────────────────────────────── */
+    .cta-final {
+      padding: 6rem 0;
+      text-align: center;
+      background: var(--beige);
+      border-bottom: 1px solid var(--green);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-bg-type {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-size: 18vw;
+      font-weight: 900;
+      color: rgba(31,77,58,0.05);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .cta-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .cta-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1.1;
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .cta-headline em { font-style: italic; color: var(--orange); }
+    .cta-sub {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: #555;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      position: relative;
+    }
+    .cta-actions {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* ── CONTACT FORM INLINE ────────────────────────── */
+    .contact-strip {
+      background: var(--green);
+      padding: 4rem 0;
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .contact-copy-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--off-white);
+      margin-bottom: 0.75rem;
+    }
+    .contact-copy-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.87rem;
+      color: rgba(245,243,239,0.65);
+      line-height: 1.7;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      background: transparent;
+      border: 1px solid rgba(245,243,239,0.3);
+      color: var(--off-white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.87rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(245,243,239,0.4);
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--orange);
+    }
+    .contact-form textarea { resize: none; height: 100px; }
+    .btn-submit {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--orange);
+      color: var(--off-white);
+      border: 1px solid var(--orange);
+      padding: 0.8rem 2rem;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: var(--off-white); color: var(--green); border-color: var(--off-white); }
+
+    /* ── FOOTER ────────────────────────────────────── */
+    footer {
+      background: var(--dark-green);
+      padding: 2.5rem 0;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--off-white);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .footer-logo span { color: var(--orange); }
+    .footer-copy {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(245,243,239,0.4);
+      letter-spacing: 0.08em;
+    }
+    .footer-mark {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.8rem;
+      color: var(--orange);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── DIVIDERS ──────────────────────────────────── */
+    .ornament-divider {
+      text-align: center;
+      padding: 1.5rem 0;
+      color: var(--orange);
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      letter-spacing: 1rem;
+    }
+
+    /* ── SCROLL FADE ───────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-grid        { grid-template-columns: 1fr; gap: 3rem; }
+      .services-grid    { grid-template-columns: 1fr; }
+      .service-card     { border-right: none; }
+      .process-steps    { grid-template-columns: 1fr 1fr; }
+      .for-whom-grid    { grid-template-columns: 1fr; gap: 2.5rem; }
+      .philosophy-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .faq-grid         { grid-template-columns: 1fr; }
+      .contact-inner    { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer-inner     { flex-direction: column; text-align: center; }
+      .nav-links        { display: none; }
+    }
+    @media (max-width: 480px) {
+      .process-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ───────────────────────────────────── -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">Taller<span>&nbsp;07</span></a>
+      <ul class="nav-links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#filosofia">Filosofía</a></li>
+        <li><a href="#faq">Preguntas</a></li>
+      </ul>
+      <a href="#contacto" class="nav-cta">Cuéntame tu proyecto</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ──────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero-dateline">Estudio de desarrollo de software · Est. 2024</p>
+      <hr class="rule-double" style="margin-bottom: 2.5rem;" />
+      <div class="hero-grid">
+        <div class="fade-in">
+          <h1 class="hero-headline">
+            Software hecho<br />con <em>criterio.</em>
+          </h1>
+          <p class="hero-sub">
+            Diseñamos y desarrollamos sistemas, plataformas y productos digitales con intención real. No somos una agencia que entrega pantallas; somos un taller que construye herramientas que funcionan.
+          </p>
+          <div class="hero-ctas">
+            <a href="#contacto" class="btn-primary">Cuéntame tu proyecto</a>
+            <a href="#proceso" class="btn-secondary">Ver cómo trabajamos →</a>
+          </div>
+        </div>
+        <div class="fade-in" style="transition-delay: 0.15s;">
+          <div class="hero-plate">
+            <p class="plate-label">Lo que construimos</p>
+            <ul class="plate-list">
+              <li>Sistemas web a medida</li>
+              <li>MVPs y productos digitales</li>
+              <li>Herramientas internas</li>
+              <li>Automatizaciones de proceso</li>
+              <li>Plataformas SaaS</li>
+            </ul>
+            <span class="plate-number">07</span>
+          </div>
+        </div>
+      </div>
+      <hr class="rule" style="margin-top: 3rem;" />
+    </div>
+  </section>
+
+  <!-- ── MANIFIESTO ─────────────────────────────── -->
+  <section class="manifesto">
+    <div class="container">
+      <p class="manifesto-eyebrow">Por qué existimos</p>
+      <blockquote class="manifesto-text">
+        "El software debe resolver problemas reales. Una interfaz bonita sin lógica de negocio sólida es <strong>maquillaje</strong>. Construir bien desde el inicio vale más que improvisar rápido."
+      </blockquote>
+      <hr class="manifesto-rule" />
+      <p class="manifesto-caption">Taller 07 · Principios de trabajo</p>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ───────────────────────────────── -->
+  <section class="services" id="servicios">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-number">§ 01</span>
+        <h2 class="section-title">Qué construimos</h2>
+      </div>
+      <div class="services-grid fade-in">
+        <div class="service-card">
+          <div class="service-card-index">01</div>
+          <h3 class="service-card-title">Sistemas web a medida</h3>
+          <p class="service-card-desc">Plataformas, paneles y herramientas administrativas diseñadas según la operación real de tu negocio. No plantillas; arquitectura pensada para lo que necesitas.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card-index">02</div>
+          <h3 class="service-card-title">MVPs y productos digitales</h3>
+          <p class="service-card-desc">Primera versión funcional para validar tu idea con velocidad, claridad técnica y una base que aguante crecer. Rápido no significa descuidado.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card-index">03</div>
+          <h3 class="service-card-title">Herramientas internas</h3>
+          <p class="service-card-desc">Soluciones que reducen trabajo manual, mejoran el flujo del equipo y te ayudan a operar mejor sin depender de software genérico que no se adapta.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card-index">04</div>
+          <h3 class="service-card-title">Diseño funcional de producto</h3>
+          <p class="service-card-desc">Antes de escribir código: flujos, módulos, estructura funcional y prototipos. Diseñar bien el sistema evita retrabajo y aclara el rumbo desde el inicio.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card-index">05</div>
+          <h3 class="service-card-title">Automatización de procesos</h3>
+          <p class="service-card-desc">Identificamos tareas repetitivas dentro de tu operación y construimos la lógica para que el sistema las resuelva solo, con trazabilidad y control.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card-index">06</div>
+          <h3 class="service-card-title">Laboratorio SaaS</h3>
+          <p class="service-card-desc">Exploración y construcción de productos digitales con modelo de negocio escalable. Para quienes quieren construir algo que exista más allá de un proyecto puntual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ────────────────────────────────── -->
+  <section class="process" id="proceso">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-number">§ 02</span>
+        <h2 class="section-title">Cómo trabajamos</h2>
+      </div>
+      <div class="process-steps fade-in">
+        <div class="process-step">
+          <div class="step-num">I</div>
+          <h3 class="step-title">Entender</h3>
+          <p class="step-desc">Antes de proponer, escuchamos. Entendemos el problema real, el contexto del negocio y qué debe resolver el sistema. Sin suposiciones.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">II</div>
+          <h3 class="step-title">Diseñar</h3>
+          <p class="step-desc">Definimos estructura, flujos y lógica funcional con intención. El diseño no es decoración; es la arquitectura que hace que el producto funcione.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">III</div>
+          <h3 class="step-title">Desarrollar</h3>
+          <p class="step-desc">Construimos con estructura, código limpio y enfoque en escalabilidad. No entregamos software que funciona solo en condiciones ideales.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">IV</div>
+          <h3 class="step-title">Iterar</h3>
+          <p class="step-desc">Ajustamos con criterio según lo que se aprende en uso real. El objetivo no es cerrar tickets; es que el producto cumpla su propósito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOR WHOM ───────────────────────────────── -->
+  <section class="for-whom">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-number">§ 03</span>
+        <h2 class="section-title">Para quién es Taller 07</h2>
+      </div>
+      <div class="for-whom-grid fade-in">
+        <div>
+          <p class="for-card-label yes">Encajamos bien si eres</p>
+          <ul class="for-card-list">
+            <li><span class="mark-yes">✦</span> Un negocio que ya opera y necesita digitalizar procesos o construir un sistema a medida.</li>
+            <li><span class="mark-yes">✦</span> Un emprendedor que quiere construir un MVP serio, con buena base técnica y visual.</li>
+            <li><span class="mark-yes">✦</span> Un equipo que busca un partner técnico con criterio de diseño y enfoque en negocio.</li>
+            <li><span class="mark-yes">✦</span> Una empresa que necesita herramientas internas que realmente mejoren su operación.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="for-card-label no">Probablemente no somos la opción si</p>
+          <ul class="for-card-list">
+            <li><span class="mark-no">—</span> Tu criterio principal de decisión es el precio más bajo disponible.</li>
+            <li><span class="mark-no">—</span> El proyecto aún no tiene objetivos claros ni definición mínima del problema.</li>
+            <li><span class="mark-no">—</span> Esperas resultados complejos en tiempos irreales sin pasar por ningún proceso.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PHILOSOPHY ─────────────────────────────── -->
+  <section class="philosophy" id="filosofia">
+    <div class="container">
+      <div class="philosophy-inner fade-in">
+        <div>
+          <p class="phil-left-label">Lo que creemos</p>
+          <h2 class="phil-title">Menos humo.<br />Más criterio.</h2>
+          <ul class="phil-beliefs">
+            <li>El software debe resolver problemas reales, no solo verse moderno.</li>
+            <li>La claridad en requerimientos evita retrabajo, costo innecesario y frustración.</li>
+            <li>Diseño, experiencia y desarrollo deben trabajar juntos.</li>
+            <li>Cada sistema debe tener una razón clara para existir.</li>
+            <li>Construir bien desde el inicio vale más que improvisar rápido.</li>
+          </ul>
+        </div>
+        <div>
+          <p class="principles-label">Principios de trabajo</p>
+          <ol class="principles-list">
+            <li><span>Entender antes de construir</span></li>
+            <li><span>Diseñar con intención</span></li>
+            <li><span>Desarrollar con estructura</span></li>
+            <li><span>Iterar con criterio</span></li>
+            <li><span>Priorizar utilidad y escalabilidad real</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────── -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header fade-in">
+        <span class="section-number">§ 04</span>
+        <h2 class="section-title">Preguntas frecuentes</h2>
+      </div>
+      <div class="faq-grid fade-in">
+        <div class="faq-item">
+          <p class="faq-q">¿Trabajan con proyectos desde cero o solo con productos existentes?</p>
+          <p class="faq-a">Ambos. Podemos ayudarte a definir y construir algo nuevo, o tomar un sistema existente que necesita estructura, mejoras o nuevas funcionalidades. El punto de partida no importa; el proceso sí.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Cuánto cuesta un proyecto?</p>
+          <p class="faq-a">Depende de la complejidad, el alcance y el tiempo involucrado. No publicamos tarifas fijas porque cada proyecto tiene sus propias variables. Lo primero es entender bien lo que necesitas y de ahí proponer algo con sentido.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Qué tecnologías usan?</p>
+          <p class="faq-a">Trabajamos principalmente con Next.js, React, Node.js y bases de datos relacionales o no relacionales según lo que el proyecto necesite. La elección tecnológica siempre está al servicio del problema, no al revés.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Cuánto dura un proyecto típico?</p>
+          <p class="faq-a">Un MVP bien definido puede estar listo en 6 a 10 semanas. Un sistema más complejo puede tomar varios meses. Lo más importante es que sepas exactamente en qué etapa está tu proyecto en cada momento.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿También hacen diseño o solo desarrollo?</p>
+          <p class="faq-a">Hacemos los dos, y es parte de lo que nos diferencia. Diseño funcional, estructura de flujos, UI y desarrollo van juntos en nuestro proceso. No entregamos código sin pensar en la experiencia, ni diseños que no se puedan construir.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">¿Puedo contactarlos si mi idea todavía no está definida del todo?</p>
+          <p class="faq-a">Sí. Parte de nuestro trabajo es ayudarte a aclarar el problema antes de proponer una solución. Si tienes una necesidad clara aunque el "cómo" todavía no, podemos conversar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ──────────────────────────────── -->
+  <section class="cta-final">
+    <span class="cta-bg-type" aria-hidden="true">07</span>
+    <div class="container">
+      <p class="cta-eyebrow">¿Tienes un proyecto?</p>
+      <h2 class="cta-headline">Construyamos algo <em>bien hecho.</em></h2>
+      <p class="cta-sub">Si tienes un sistema que necesitas digitalizar, una idea que quieres validar o una operación que merece mejores herramientas — hablemos.</p>
+      <div class="cta-actions">
+        <a href="#contacto" class="btn-primary">Cuéntame tu proyecto</a>
+        <a href="#proceso" class="btn-secondary">Ver el proceso →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────── -->
+  <section class="contact-strip" id="contacto">
+    <div class="container">
+      <div class="contact-inner">
+        <div>
+          <h2 class="contact-copy-title">Empecemos<br />con una conversación.</h2>
+          <p class="contact-copy-sub">No necesitas tener todo listo. Solo cuéntame qué estás construyendo o qué problema necesitas resolver. De ahí partimos.</p>
+        </div>
+        <form class="contact-form" onsubmit="handleForm(event)">
+          <input type="text" placeholder="Nombre" required />
+          <input type="email" placeholder="Correo electrónico" required />
+          <input type="text" placeholder="¿De qué trata tu proyecto?" />
+          <textarea placeholder="Cuéntame un poco más..."></textarea>
+          <button type="submit" class="btn-submit">Enviar mensaje</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">Taller<span>&nbsp;07</span></span>
+        <span class="footer-mark">Software hecho con criterio</span>
+        <span class="footer-copy">© 2024 Taller 07. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Form handler
+    function handleForm(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.btn-submit');
+      btn.textContent = 'Mensaje enviado ✓';
+      btn.style.background = '#1F4D3A';
+      btn.disabled = true;
+    }
+  </script>
+</body>
+</html>
