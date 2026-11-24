@@ -1,0 +1,13 @@
+{
+  "name": "Taller 07 · Software hecho con criterio",
+  "short_name": "Taller 07",
+  "lang": "es-MX",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#F4F2EE",
+  "theme_color": "#214E3B",
+  "icons": [
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
