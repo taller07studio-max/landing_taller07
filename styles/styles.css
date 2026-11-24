@@ -502,6 +502,13 @@ p { text-wrap: pretty; }
 .footer__cols h2 { margin-bottom: 14px; font: 600 .75rem var(--font-mono); text-transform: uppercase; color: var(--c-orange-soft); }
 .footer__cols ul { display: grid; gap: 10px; padding: 0; list-style: none; }
 .footer__cols a:hover { color: var(--c-white); }
+/* Redes: botón circular con ícono (área táctil de 44px) */
+.social {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; margin-top: 18px;
+  border: 1px solid rgba(255, 255, 255, .18); border-radius: 50%; color: var(--c-cream);
+  transition: background-color var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-base) var(--ease-out);
+}
+.footer__cols .social:hover { background: var(--c-orange); border-color: var(--c-orange); color: var(--c-green-ink); transform: translateY(-2px); }
 .footer__word {
   display: flex; align-items: flex-end; margin: 60px 0 0 -.04em; white-space: nowrap;
   font: 800 clamp(5.5rem, 21vw, 18.75rem)/.8 var(--font-display); letter-spacing: -.055em; color: var(--c-cream);
