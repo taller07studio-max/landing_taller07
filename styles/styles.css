@@ -537,6 +537,24 @@ p { text-wrap: pretty; }
 .madlib button[aria-busy="true"] { opacity: .7; cursor: progress; }
 .madlib button[aria-busy="true"] .btn__icon { animation: nudge 1s var(--ease-out) infinite; }
 
+/* Confirmación de envío: ocupa el lugar de los campos */
+.madlib.is-sent > :not(.madlib__done, .madlib__badge) { display: none; }
+.madlib__done { display: grid; justify-items: start; gap: 14px; min-height: 320px; align-content: center; outline: none; }
+.madlib__done[hidden] { display: none; }
+.madlib__check {
+  display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 6px;
+  border-radius: 50%; background: var(--c-green); color: var(--c-white); box-shadow: var(--shadow-sm);
+}
+.madlib__done h3 { font-size: clamp(2.25rem, 3.4vw, 3rem); font-weight: 800; line-height: .95; letter-spacing: var(--tracking-h2); color: var(--c-green); }
+.madlib__done .accent { color: var(--c-orange-display); } /* la tarjeta es crema: no hereda el blanco de .theme-orange */
+.madlib__done p { max-width: 40ch; font-size: var(--fs-lead); color: var(--c-body); }
+.madlib__done p b { font-weight: 600; color: var(--c-ink); overflow-wrap: anywhere; }
+.madlib__done .btn { margin-top: 10px; }
+@media (prefers-reduced-motion: no-preference) {
+  .madlib.is-sent .madlib__done { animation: rise 500ms var(--ease-out) both; }
+  .madlib.is-sent .madlib__check { animation: pop 450ms 120ms var(--ease-out) both; }
+}
+
 /* ---------- 15. Entrada al hacer scroll (solo con JS y sin reduced-motion) ----------
    Usa `translate` (no `transform`) para no pisar las rotaciones de las tarjetas */
 @media (prefers-reduced-motion: no-preference) {
@@ -548,3 +566,5 @@ p { text-wrap: pretty; }
   .js .reveal.is-in { opacity: 1; translate: 0 0; }
 }
 @keyframes nudge { 50% { transform: translateX(4px); } }
+@keyframes rise { from { opacity: 0; translate: 0 12px; } }
+@keyframes pop  { from { transform: scale(.4); opacity: 0; } }

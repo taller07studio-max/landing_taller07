@@ -74,6 +74,30 @@
       if (state) status.dataset.state = state; else delete status.dataset.state;
     };
 
+    // Panel de confirmación: reemplaza los campos y recibe el foco
+    const done = form.querySelector('.madlib__done');
+    const badge = form.querySelector('.madlib__badge');
+    const badgeText = badge.textContent;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const showDone = (d) => {
+      done.querySelector('[data-done-name]').textContent = d.nombre;
+      done.querySelector('[data-done-email]').textContent = d.correo;
+      setStatus('');
+      form.classList.add('is-sent');
+      done.hidden = false;
+      badge.textContent = '// enviado ✓';
+      done.focus({ preventScroll: true });
+      done.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+
+    done.querySelector('[data-done-reset]').addEventListener('click', () => {
+      form.classList.remove('is-sent');
+      done.hidden = true;
+      badge.textContent = badgeText;
+      fields.nombre.focus();
+    });
+
     const validate = () => {
       const errors = [];
       Object.entries(fields).forEach(([key, input]) => {
@@ -148,7 +172,7 @@
         });
         if (!res.ok) throw new Error(res.status);
         form.reset();
-        setStatus(`¡Listo, ${d.nombre}! Recibimos tu mensaje y te respondemos por correo.`, 'success');
+        showDone(d);
       } catch {
         // No se borra lo escrito: el usuario puede reintentar
         setStatus(`No pudimos enviarlo. Intenta de nuevo o escríbenos a ${form.dataset.mailto}.`, 'error');
