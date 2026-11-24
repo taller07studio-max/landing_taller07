@@ -355,9 +355,9 @@
       <p class="contact__lead">No necesitas tener todo listo. Cuéntanos qué estás construyendo o qué problema necesitas resolver. De ahí partimos.</p>
     </div>
 
-    <!-- data-endpoint: URL que recibe el POST en JSON (Formspree, función de Vercel…).
-         Si está vacío, el formulario arma el correo y abre la app de correo (mailto). -->
-    <form class="madlib" action="#" method="post" novalidate data-endpoint="" data-mailto="taller07studio@gmail.com"><!-- TODO: endpoint (Formspree / función de Vercel) -->
+    <!-- Formspree: con JS se envía por fetch (JSON) y muestra estados en la página;
+         sin JS, el POST normal va a la misma URL. data-mailto es el respaldo si el envío falla. -->
+    <form class="madlib" action="https://formspree.io/f/xkjrkenw" method="post" novalidate data-endpoint="https://formspree.io/f/xkjrkenw" data-mailto="taller07studio@gmail.com">
       <span class="madlib__badge" aria-hidden="true">// 30 segundos</span>
       <div class="madlib__sentence">
         Hola, soy
@@ -385,6 +385,8 @@
       </div>
       <label class="sr-only" for="f-detalle">Cuéntanos un poco más</label>
       <textarea id="f-detalle" name="detalle" rows="3" placeholder="Cuéntanos un poco más… (opcional)"></textarea>
+      <!-- Trampa anti-spam de Formspree: las personas no la ven ni la llenan -->
+      <input class="sr-only" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="madlib__foot">
         <small>sin compromiso · te respondemos por correo</small><!-- TODO: confirmar copy -->
         <button class="btn btn--dark btn--lg" type="submit">Enviar mensaje

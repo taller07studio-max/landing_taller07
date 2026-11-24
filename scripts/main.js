@@ -102,11 +102,14 @@
         tipo: data.get('tipo'),
         etapa: data.get('etapa'),
         detalle: (data.get('detalle') || '').trim(),
+        _gotcha: data.get('_gotcha') || '',
       };
     };
 
+    const subjectFor = (d) => `Proyecto: ${d.tipo} (${d.etapa}) · ${d.nombre}`;
+
     const openMailto = (d) => {
-      const subject = `Proyecto: ${d.tipo} (${d.etapa}) · ${d.nombre}`;
+      const subject = subjectFor(d);
       const body = [
         `Hola, soy ${d.nombre} y mi correo es ${d.correo}.`,
         `Quiero construir ${d.tipo} y ahora mismo está en etapa de ${d.etapa}.`,
@@ -140,7 +143,8 @@
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(d),
+          // email y _replyto: "Responder" en el correo va directo al cliente. _subject: asunto del aviso
+          body: JSON.stringify({ ...d, email: d.correo, _replyto: d.correo, _subject: subjectFor(d) }),
         });
         if (!res.ok) throw new Error(res.status);
         form.reset();
