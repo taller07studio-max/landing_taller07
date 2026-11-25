@@ -3,14 +3,14 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "taller07.vercel.app"
         }
       ],
-      "destination": "https://taller07.com/:path*",
+      "destination": "https://taller07.com/$1",
       "permanent": true
     },
     {
