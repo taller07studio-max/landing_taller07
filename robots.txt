@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://taller07.com/sitemap.xml
+Sitemap: {{SITE_URL}}/sitemap.xml
