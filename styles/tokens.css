@@ -45,10 +45,11 @@
   --c-diff-rem:     #F49B8A;
 
   /* ---------- Tipografía ---------- */
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-accent:  "Instrument Serif", ui-serif, Georgia, serif;   /* solo itálica */
-  --font-body:    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Las familias las carga next/font (app/fonts.ts) y las expone como --font-*-src */
+  --font-display: var(--font-display-src), ui-sans-serif, system-ui, sans-serif;
+  --font-accent:  var(--font-accent-src), ui-serif, Georgia, serif;   /* solo itálica */
+  --font-body:    var(--font-body-src), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    var(--font-mono-src), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Escala fluida (mín. móvil → máx. 1440px) */
   --fs-hero:      clamp(3.25rem, 9.4vw, 8.5rem);   /* 52 → 136px */
@@ -107,4 +108,20 @@
   /* ---------- Foco ----------
      Cada tema de sección redefine --focus-color para mantener ≥ 3:1 */
   --focus-color: var(--c-orange-ink);
+
+  /* ---------- Productos ----------
+     Tianquiz: identidad PROVISIONAL (rosa mexicano). Reemplazar si la marca define otra. */
+  --tq-accent: #C8175F;      /* texto blanco encima 5.6:1 · como texto sobre crema 5.0:1 */
+  --tq-accent-soft: #FBE3EC;
+  --tq-accent-on-dark: #F9B8D2; /* sobre verde 5.8:1 */
+  --tq-yellow: #F7C948;
+  --tq-blue: #2E7DBA;
+  --wa: #15803D;             /* botón WhatsApp · texto blanco 5.0:1 */
+  --bk-pink: #E2A8B2;        /* Boroki: tokens del sistema Boroki */
+  --bk-orange: #EC8F5E;
+  --bk-cream: #FBF9F6;
+  --bk-ink: #3A1E2A;         /* sobre rosa 7.5:1 */
+  --bk-text: #5A2F3D;        /* sobre rosa 5.5:1 */
+  --bk-accent: #8A3420;      /* texto grande sobre rosa 4.0:1 */
+  --bk-rust: #B5562F;        /* texto grande sobre crema 4.3:1 */
 }
